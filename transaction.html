@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Page</title>
+    <style>
+        body {
+            background-color: #2c2c2c;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 50px;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+        }
+
+        h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .loading {
+            font-size: 1.5em;
+            margin: 20px 0;
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards 1s;
+        }
+
+        .explosion {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: url('/module/download.jpg') no-repeat center center;
+            background-size: cover;
+            animation: explode 3s forwards 2s;
+        }
+
+        @keyframes explode {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.7; }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(2); }
+        }
+
+        .falling {
+            position: absolute;
+            font-size: 2em;
+            color: #ff0000;
+            animation: fall 1s forwards;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        .button-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .button {
+            padding: 15px 30px;
+            background-color: #ff5500;
+            border: none;
+            font-size: 1.2em;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #e64700;
+        }
+
+        .loading-text {
+            font-size: 1.3em;
+            margin-top: 20px;
+            color: #00FF00;
+        }
+
+    </style>
+</head>
+<body>
+    <h1 id="title">Transaction Page</h1>
+    <div class="loading" id="loading">Processing Transaction...</div>
+    <div class="explosion" id="explosion"></div>
+
+    <audio id="audio" src="/module/fbi.mp3"></audio>
+
+    <div class="button-container">
+        <button class="button" onclick="simulateTransaction()">Start Transaction</button>
+    </div>
+
+    <div class="loading-text" id="loadingText"></div>
+
+    <script>
+        // Elements
+        let loadingElement = document.getElementById('loading');
+        let explosionElement = document.getElementById('explosion');
+        let audioElement = document.getElementById('audio');
+        let titleElement = document.getElementById('title');
+        let loadingTextElement = document.getElementById('loadingText');
+
+        function simulateTransaction() {
+            loadingElement.style.opacity = 1;
+            loadingTextElement.textContent = "Initiating Payment...";
+
+            // Simulate loading for 3 seconds
+            setTimeout(() => {
+                loadingTextElement.textContent = "Payment Confirmed!";
+                // Play audio and show explosion animation simultaneously
+                audioElement.play();
+                explosionElement.style.display = 'block';
+
+                // Hide loading text
+                loadingElement.style.display = 'none';
+
+                // Break and fall animation for title
+                breakAndFall(titleElement.innerText);
+            }, 3000);
+        }
+
+        function breakAndFall(text) {
+            titleElement.innerHTML = ''; // Clear the title
+            for (let char of text) {
+                let span = document.createElement('span');
+                span.className = 'falling';
+                span.innerText = char;
+                span.style.left = `${Math.random() * 100}vw`; // Random horizontal position
+                titleElement.appendChild(span);
+                // Trigger the falling animation
+                setTimeout(() => {
+                    span.style.animation = 'fall 1s forwards';
+                }, 50);
+            }
+        }
+    </script>
+</body>
+</html>
